@@ -11,9 +11,9 @@ class PyQuboOneHotEncSolver(ProblemSolver):
 
     def solve_problem(self, problem_instance: dict):
         return self._solve_knapsack_problem(
-            problem_instance['weights'],
-            problem_instance['values'], 
-            problem_instance['max_weight']
+            problem_instance['weights'].tolist(),
+            problem_instance['values'].tolist(), 
+            int(problem_instance['max_weight'])
         )
 
     def _solve_knapsack_problem(self, weights, values, max_weight):

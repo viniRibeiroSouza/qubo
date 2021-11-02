@@ -4,6 +4,7 @@ import neal
 from Models.problem_solver import ProblemSolver
 from pyqubo import Binary, Constraint, Placeholder, Array, LogEncInteger
 from Knapsack.problems_instances import problem_instances
+from typing import List
 
 class PyQuboLogEncSolver(ProblemSolver):
     def problem_instances(self):
@@ -11,12 +12,12 @@ class PyQuboLogEncSolver(ProblemSolver):
 
     def solve_problem(self, problem_instance: dict):
         return self._solve_knapsack_problem(
-            problem_instance['weights'],
-            problem_instance['values'], 
-            problem_instance['max_weight']
+            problem_instance['weights'].tolist(),
+            problem_instance['values'].tolist(), 
+            int(problem_instance['max_weight'])
         )
 
-    def _solve_knapsack_problem(self, weights, values, max_weight):
+    def _solve_knapsack_problem(self, weights: List, values: List, max_weight: int):
         n=len(values)
         items = Array.create('item', shape=n, vartype="BINARY")
         # define the sum of weights and values using variables

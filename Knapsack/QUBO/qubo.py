@@ -8,16 +8,14 @@ from gurobipy import GRB
 import itertools
 import copy
 import numpy.random
-import dimod, neal
-from dwave.system import DWaveSampler
 
 class KnapsackQUBOSolver(ProblemSolver):
     def problem_instances(self):
         return problem_instances
 
     def solve_problem(self, problem_instance: dict):
-        w = np.array(problem_instance['weights'])
-        c = np.array(problem_instance['values'])
+        w = problem_instance['weights']
+        c = problem_instance['values']
         capacity = problem_instance['max_weight']
 
         assert c.size == w.size, "The number of values and weights must be equal"
