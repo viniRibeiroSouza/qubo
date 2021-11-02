@@ -130,3 +130,6 @@ dmypy.json
 
 # remove idea files
 .idea
+
+# csv files
+.csv

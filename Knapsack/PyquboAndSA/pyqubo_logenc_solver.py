@@ -2,10 +2,10 @@ from typing import Any
 import neal
 
 from Models.problem_solver import ProblemSolver
-from pyqubo import Binary, Constraint, Placeholder, Array, OneHotEncInteger
+from pyqubo import Binary, Constraint, Placeholder, Array, LogEncInteger
 from Knapsack.problems_instances import problem_instances
 
-class KnapsackSampleSolver(ProblemSolver):
+class PyQuboLogEncSolver(ProblemSolver):
     def problem_instances(self):
         return problem_instances
 
@@ -29,7 +29,7 @@ class KnapsackSampleSolver(ProblemSolver):
         lmd1 = Placeholder("lmd1")
         lmd2 = Placeholder("lmd2")
         # create Hamiltonian and model
-        weight_one_hot = OneHotEncInteger("weight_one_hot", value_range=(1, max_weight), strength=lmd1)
+        weight_one_hot = LogEncInteger("weight_one_hot", value_range=(1, max_weight))
         Ha = Constraint((weight_one_hot - knapsack_weight)**2,
                         "weight_constraint")
         Hb = knapsack_value
@@ -54,5 +54,12 @@ class KnapsackSampleSolver(ProblemSolver):
                 if not best.constraints(only_broken=True):
                     feasible_sols.append(best)
         best_feasible = min(feasible_sols, key=lambda x: x.energy, default=[])
-        return best_feasible
         
+        is_feasible = False
+        energy = .0
+        sol = []
+        if best_feasible:
+            is_feasible = True
+            sol = [best_feasible.sample[f'item[{i}]'] for i in range(len(values))]
+            energy = -best_feasible.energy
+        return sol, energy, is_feasible 
