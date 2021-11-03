@@ -1,0 +1,1 @@
+from .tsp_map_base import TspMap
